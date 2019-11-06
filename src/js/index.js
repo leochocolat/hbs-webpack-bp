@@ -1,1 +1,2 @@
-console.log('Hello');
+import ComponentFactory from './ComponentFactory';
+ComponentFactory.start();

@@ -1,23 +1,31 @@
-<!doctype html>
-<html lang="en" dir="ltr">
-<head>
-{{#block "head"}}{{/block}}
-<% for (var css in htmlWebpackPlugin.files.css) { %>
-<link href="<%= htmlWebpackPlugin.files.css[css] %>" rel="stylesheet">
-<% } %>
-</head>
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+  <head>
+    
+    {{#block "head"}}{{/block}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{site.title}}</title>
 
-<body class="{{bodyclass}}">
-  {{#block "body"}}{{/block}}
-</body>
+    <% for (var css in htmlWebpackPlugin.files.css) { %>
+    <link href="<%= htmlWebpackPlugin.files.css[css] %>" rel="stylesheet">
+    <% } %>
 
-{{#block "scripts"}}{{/block}}
+  </head>
 
-<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
-<script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
-<% } %>
+  <body class="{{bodyclass}}">
+    {{#block "body"}}{{/block}}
+  </body>
 
-<% if (htmlWebpackPlugin.options.devServer) { %>
-<script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>
-<% } %>
+  {{#block "scripts"}}{{/block}}
+
+  <% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+  <script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
+  <% } %>
+
+  <% if (htmlWebpackPlugin.options.devServer) { %>
+  <script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>
+  <% } %>
+
 </html>
