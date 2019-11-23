@@ -60,3 +60,7 @@ dist
 └── page
     └── index.html
 ```
+
+### Project Structure
+
+Handle multiple pages
