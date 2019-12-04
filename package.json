@@ -11,7 +11,7 @@
     "clean": "rimraf build generated",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Mitch Heddles <mitchell.heddles@gmail.com>",
+  "author": "Mitch Heddles <mitchell.heddles@gmail.com>, edited by Léo Mouraire",
   "license": "MIT",
   "browserslist": [
     "> 1%",

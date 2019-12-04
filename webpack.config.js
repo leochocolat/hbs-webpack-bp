@@ -91,8 +91,7 @@ module.exports = {
       data: path.join(sourceDir, 'data', '*.json'),
       partials: [
         path.join(templateDir, 'template.hbs'),
-        path.join(sourceDir, 'views', 'pages', '*.hbs'),
-        path.join(sourceDir, 'views', 'partials', '*.hbs'),
+        path.join(sourceDir, 'views', '**', '*.hbs'),
       ],
       onBeforeSetup: Handlebars => {
         return registerHandlersHelpers(Handlebars);
