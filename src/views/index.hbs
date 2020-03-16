@@ -2,13 +2,15 @@
   {{#content "body"}}
 
   
-  <main role="main">
-    
-    {{> partials/header }}
+  <main role="main" class="js-scroll-container">
+    <div class="js-scroll-content">
+      {{> sections/section-home }}
 
-    {{> sections/section-home }}
+    </div>
+    {{!-- {{> partials/header }} --}}
 
-    {{> partials/footer }}
+
+    {{!-- {{> partials/footer }} --}}
     
   </main>
 

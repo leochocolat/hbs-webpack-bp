@@ -61,6 +61,6 @@ dist
     └── index.html
 ```
 
-### Project Structure
+### Todo
 
-Handle multiple pages
+Handle handlebars compilation errors

@@ -1,5 +1,5 @@
 const COMPONENTS = {
-    'example-component': () => import('./components/ExampleComponent'),
+    'sample': () => import('./components/SampleComponent'),
 }
 
 class ComponentFactory {
@@ -14,13 +14,20 @@ class ComponentFactory {
             const element = this._elements[i];
             const componentName = element.getAttribute(this._selector);
             if (COMPONENTS[componentName]) {
-                COMPONENTS[componentName]().then(function(value) {
-                    new value.default({el: element});
+                COMPONENTS[componentName]().then((value) => {
+                    this._components[componentName] = new value.default({ el: element });
                 });
             }
             else {
                 console.log(`Component: '${componentName}' not found`);
             }
+        }
+    }
+
+    update() {
+        for (let i in this._components) {
+            if (!this._components[i].tick) continue;
+            this._components[i].tick();
         }
     }
 }
