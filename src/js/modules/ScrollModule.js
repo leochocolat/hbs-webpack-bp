@@ -1,23 +1,26 @@
 import bindAll from '../utils/bindAll';
 
 import ScrollManager from '../managers/ScrollManager';
+import ScrollTriggerManager from '../managers/ScrollTriggerManager';
 import ResizeManager from '../managers/ResizeManager';
 
 import { TweenLite } from 'gsap';
 
-class SmoothScrollModule {
+class ScrollModule {
     constructor(options) {
         bindAll(
             this,
             '_scrollHandler',
             '_readyStateChangeHandler',
             '_resizeHandler',
-            '_resizeEndHandler'
+            '_resizeEndHandler',
+            '_callHandler'
         );
 
         this.container = options.container;
         this.content = options.content;
         this.smooth = options.smooth;
+        this.smoothValue = options.smoothValue;
 
         this._scroll = {};
         this._previousScroll = {};
@@ -30,37 +33,58 @@ class SmoothScrollModule {
         this._setup();
     }
 
-    _setup() {
-        ScrollManager.enableSmoothScroll();
-        ScrollManager.setSmoothValue(this.smooth);
-
-        this.content.style.position = 'fixed';
-
-        this._resize();
-
+    /**
+    * Public
+    */
+    enable() {
         this._setupEventListeners();
+    }
+
+    disable() {
+        this._removeEventListeners();
+    }
+
+    /**
+    * Private
+    */
+    _setup() {
+        if (this.smooth) {
+            ScrollManager.enableSmoothScroll();
+            ScrollManager.setSmoothValue(this.smoothValue);
+        }
+        
+        this._setupEventListeners();
+        this._setStyleProps();
+        this._resize();
+        ScrollTriggerManager.start({ el: this.container });
+    }
+
+    _setStyleProps() {
+        //TODO: add class instead of setting style
+        this.content.style.position = 'fixed';
     }
 
     _resize() {
         this._contentHeight = this.content.clientHeight;
         this.container.style.height =  `${this._contentHeight}px`;
+        ScrollTriggerManager.setContentHeight(this._contentHeight);
 
         this._setOffset();
     }
 
     _setOffset() {
         const position = ScrollManager.getPosition();
-
         const y = this._offsetY + - position.y;
 
         TweenLite.set(this.content, { y: y });
     }
 
     _checkContentHeight() {
-        const contentheight = this.content.clientHeight;
-        if (this._contentheight !== contentheight) {
+        const contentHeight = this.content.clientHeight;
+
+        if (this._contentHeight != contentHeight) {
             this._resize();
-        }
+        };
     }
 
     update() {
@@ -74,9 +98,23 @@ class SmoothScrollModule {
         ScrollManager.addEventListener('scroll', this._scrollHandler);
         ScrollManager.addEventListener('scroll:end', this._scrollEndHandler);
 
+        ScrollTriggerManager.addEventListener('call', this._callHandler);
+
         document.addEventListener('readystatechange', this._readyStateChangeHandler);
         ResizeManager.addEventListener('resize', this._resizeHandler);
         ResizeManager.addEventListener('resize:end', this._resizeEndHandler);
+    }
+
+    _removeEventListeners() {
+        ScrollManager.removeEventListener('scroll', this._scrollHandler);
+        ScrollManager.removeEventListener('scroll:end', this._scrollEndHandler);
+
+        ScrollTriggerManager.removeEventListener('call', this._callHandler);
+        ScrollTriggerManager.removeEventListeners();
+
+        document.removeEventListener('readystatechange', this._readyStateChangeHandler);
+        ResizeManager.removeEventListener('resize', this._resizeHandler);
+        ResizeManager.removeEventListener('resize:end', this._resizeEndHandler);
     }
 
     _scrollHandler(e) {
@@ -85,6 +123,10 @@ class SmoothScrollModule {
 
     _scrollEndHandler(e) {
         this._setOffset();
+    }
+
+    _callHandler(e) {
+        TweenLite.to(e.el, 1, { color: 'red', delay: 0.5 });
     }
 
     _readyStateChangeHandler() {
@@ -100,4 +142,4 @@ class SmoothScrollModule {
     }
 }
 
-export default SmoothScrollModule;
+export default ScrollModule;

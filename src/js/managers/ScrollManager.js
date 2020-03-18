@@ -9,8 +9,8 @@ const SMOOTH = 0.15;
 const THROTTLE_VALUE = 300;
 
 class ScrollManager extends EventDispatcher {
-    constructor() {
-        super();
+    constructor(options = {}) {
+        super(options);
 
         bindAll(
             this,
@@ -22,7 +22,7 @@ class ScrollManager extends EventDispatcher {
         this._scrollPosition = { x: 0, y: 0 };
         this._smoothScrollPosition = { x: 0, y: 0 };
         this._isSmoothScrollEnabled = false;
-        this._smoothScrollLerpFactor = 0.15;
+        this._smoothScrollLerpFactor = SMOOTH;
         this._scrollDelta = 0;
 
         this._setup();

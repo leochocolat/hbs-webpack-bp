@@ -1,5 +1,5 @@
 import ComponentFactory from './ComponentFactory';
-import SmoothScrollModule from './modules/SmoothScrollModule';
+import ScrollModule from './modules/ScrollModule';
 
 class App {
     constructor() {
@@ -12,10 +12,11 @@ class App {
     }
 
     _setupSmoothScroll() {
-        this._smoothScrollModule = new SmoothScrollModule({
+        this._smoothScrollModule = new ScrollModule({
             container: document.querySelector('.js-scroll-container'),
             content: document.querySelector('.js-scroll-content'),
-            smooth: 0.1
+            smooth: true,
+            smoothValue: 0.15
         });
     }
 
