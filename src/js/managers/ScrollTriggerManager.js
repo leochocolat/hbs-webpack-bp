@@ -47,7 +47,7 @@ class ScrollTriggerManager extends EventDispatcher {
 
         for (let i = 0; i < elements.length; i++) {
             const element = elements[i];
-            const className = element.dataset.scrollClass;//not used
+            const className = element.dataset.scrollClass;//not used for now
             const top = element.getBoundingClientRect().top + ScrollManager.getPosition().y;
             const bottom = top + element.offsetHeight;
             const offset = element.dataset.scrollOffset ? parseInt(element.dataset.scrollOffset) : 0;

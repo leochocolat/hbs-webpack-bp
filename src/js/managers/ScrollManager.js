@@ -81,9 +81,16 @@ class ScrollManager extends EventDispatcher {
     _updateValues() {
         this._updateScrollHeight();
 
-        this._scrollPosition = {
+        const scrollPosition = {
             x: document.body.scrollLeft || document.documentElement.scrollLeft,
             y: document.body.scrollTop || document.documentElement.scrollTop
+        }
+
+        this._deltaY = this._scrollPosition.y - scrollPosition.y;
+
+        this._scrollPosition = {
+            x: scrollPosition.x,
+            y: scrollPosition.y
         };
     }
 
@@ -108,9 +115,9 @@ class ScrollManager extends EventDispatcher {
         this._smoothScrollPosition.x = Math.round(x * 100) / 100;
         this._smoothScrollPosition.y = Math.round(y * 100) / 100;
 
-        this._scrollDelta = this._previousSmoothScrollPositionY - this._smoothScrollPosition.y;
+        this._smoothDeltaY = this._previousSmoothScrollPositionY - this._smoothScrollPosition.y;
 
-        if (this._scrollDelta !== 0) {
+        if (this._smoothDeltaY !== 0) {
             this._smoothScrollHandler();
         }
 
@@ -129,7 +136,13 @@ class ScrollManager extends EventDispatcher {
         this._updateValues();
 
         if (!this._isSmoothScrollEnabled) {
-            this.dispatchEvent('scroll', { target: this, x: this._scrollPosition.x, y: this._scrollPosition.y });
+            this.dispatchEvent('scroll', { 
+                target: this, 
+                x: this._scrollPosition.x, 
+                y: this._scrollPosition.y,
+                delta: this._deltaY,
+                direction: this._deltaY > 0 ? 'up' : 'down'
+            });
 
             clearTimeout(this._scrollTimeout);
             this._scrollTimeout = setTimeout(this._scrollEndHandler, THROTTLE_VALUE);
@@ -137,7 +150,13 @@ class ScrollManager extends EventDispatcher {
     }
 
     _smoothScrollHandler() {
-        this.dispatchEvent('scroll', { target: this, x: this._smoothScrollPosition.x, y: this._smoothScrollPosition.y });
+        this.dispatchEvent('scroll', {
+            target: this, 
+            x: this._smoothScrollPosition.x, 
+            y: this._smoothScrollPosition.y, 
+            delta: this._smoothDeltaY, 
+            direction: this._smoothDeltaY > 0 ? 'up' : 'down'  
+        });
 
         clearTimeout(this._smoothScrollTimeout);
         this._smoothScrollTimeout = setTimeout(this._scrollEndHandler, THROTTLE_VALUE);

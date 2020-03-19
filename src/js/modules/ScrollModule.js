@@ -126,7 +126,7 @@ class ScrollModule {
     }
 
     _callHandler(e) {
-        TweenLite.to(e.el, 1, { color: 'red', delay: 0.5 });
+        TweenLite.fromTo(e.el, 1, { autoAlpha: 0, y: 100, rotation: 10 }, { autoAlpha: 1, y: 0, rotation: 0 });
     }
 
     _readyStateChangeHandler() {
