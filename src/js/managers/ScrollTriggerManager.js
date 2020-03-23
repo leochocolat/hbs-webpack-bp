@@ -3,6 +3,7 @@ import ScrollManager from './ScrollManager';
 import ResizeManager from './ResizeManager';
 
 import bindAll from '../utils/bindAll';
+import { TweenLite } from 'gsap';
 
 class ScrollTriggerManager extends EventDispatcher {
     constructor(options) {
@@ -53,6 +54,7 @@ class ScrollTriggerManager extends EventDispatcher {
             const offset = element.dataset.scrollOffset ? parseInt(element.dataset.scrollOffset) : 0;
             const repeat = element.dataset.scrollRepeat;
             const call = element.dataset.scrollCall;
+            const speed = element.dataset.scrollSpeed ? parseInt(element.dataset.scrollSpeed) : undefined;
 
             const trigger = {
                 el: element,
@@ -62,6 +64,7 @@ class ScrollTriggerManager extends EventDispatcher {
                 offset: offset,
                 repeat: repeat,
                 call: call,
+                speed: speed,
                 inView: false
             }
 
@@ -76,6 +79,10 @@ class ScrollTriggerManager extends EventDispatcher {
         for (let i = 0; i < this.triggers.length; i++) {
             const element = this.triggers[i];
 
+            if (element.speed) {
+                this._transformElement(element);
+            }
+
             if (!element.inView) {
                 if ((scrollBottom >= element.top) && (scrollTop < element.bottom)) {
                     this._setInView(element);
@@ -88,6 +95,14 @@ class ScrollTriggerManager extends EventDispatcher {
                 }
             }            
         }
+    }
+
+    _transformElement(element) {
+        // const scrollTop = ScrollManager.getPosition().y;
+        // const scrollMiddle = scrollTop + window.innerHeight/2;
+
+        // const transformDistance = (scrollMiddle - element.top) * - element.speed;
+        // TweenLite.set(element.el, { y: transformDistance });
     }
 
     _setInView(trigger) {
@@ -145,6 +160,7 @@ class ScrollTriggerManager extends EventDispatcher {
 
     _scrollHandler() {
         this._detectElements();
+        this._transformElements();
     }
 
     _scrollEndHandler() {

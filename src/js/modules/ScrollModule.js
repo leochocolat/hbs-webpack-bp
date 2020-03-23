@@ -38,10 +38,12 @@ class ScrollModule {
     */
     enable() {
         this._setupEventListeners();
+        this._setStyleProps();
     }
 
     disable() {
         this._removeEventListeners();
+        this._removeStyleProps();
     }
 
     /**
@@ -60,8 +62,14 @@ class ScrollModule {
     }
 
     _setStyleProps() {
-        //TODO: add class instead of setting style
+        document.querySelector('html').classList.add('hasSmoothScroll');
+        
+        this.content.style.willChange = 'transform';
         this.content.style.position = 'fixed';
+    }
+
+    _removeStyleProps() {
+        //TODO
     }
 
     _resize() {
