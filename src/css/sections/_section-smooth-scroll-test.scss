@@ -19,11 +19,23 @@
     }
     
     h1 {
+        text-align: center;
         transform-origin: left top;
         font-size: 80px;
         font-family: sans-serif;
         text-transform: uppercase;    
+        white-space: nowrap;
+
+        span {
+            display: inline-block;
+        }
     }
 }
 
-
+@include mq-extra-narrow {
+   .section-smooth-scroll-test {
+    h1 {
+        font-size: 40px;
+    }
+   } 
+}

@@ -3,7 +3,12 @@ import ScrollManager from './ScrollManager';
 import ResizeManager from './ResizeManager';
 
 import bindAll from '../utils/bindAll';
+import lerp from '../utils/lerp';
 import { TweenLite } from 'gsap';
+
+//TODO : 
+//ADD CUSTOM TARGET
+//ADD STICKY OPTION
 
 class ScrollTriggerManager extends EventDispatcher {
     constructor(options) {
@@ -24,13 +29,14 @@ class ScrollTriggerManager extends EventDispatcher {
     start(options) {
         this.el = options.el;
         this._setupTriggers();
-        this._detectElements();
         this._setupEventListeners();
     }
 
     setContentHeight(height) {
         this._contentHeight = height;
         this._updateElements();
+
+        this._detectElements();
     }
 
     removeEventListeners() {
@@ -54,7 +60,9 @@ class ScrollTriggerManager extends EventDispatcher {
             const offset = element.dataset.scrollOffset ? parseInt(element.dataset.scrollOffset) : 0;
             const repeat = element.dataset.scrollRepeat;
             const call = element.dataset.scrollCall;
-            const speed = element.dataset.scrollSpeed ? parseInt(element.dataset.scrollSpeed) : undefined;
+            const speed = element.dataset.scrollSpeed ? parseFloat(element.dataset.scrollSpeed) : undefined;
+            const delay = element.dataset.scrollDelay ? parseFloat(element.dataset.scrollDelay) : undefined;
+            const direction = element.dataset.scrollDirection || 'vertical';
 
             const trigger = {
                 el: element,
@@ -65,6 +73,8 @@ class ScrollTriggerManager extends EventDispatcher {
                 repeat: repeat,
                 call: call,
                 speed: speed,
+                delay: delay,
+                direction: direction,
                 inView: false
             }
 
@@ -79,10 +89,6 @@ class ScrollTriggerManager extends EventDispatcher {
         for (let i = 0; i < this.triggers.length; i++) {
             const element = this.triggers[i];
 
-            if (element.speed) {
-                this._transformElement(element);
-            }
-
             if (!element.inView) {
                 if ((scrollBottom >= element.top) && (scrollTop < element.bottom)) {
                     this._setInView(element);
@@ -93,16 +99,39 @@ class ScrollTriggerManager extends EventDispatcher {
                 if ((scrollBottom < element.top) || (scrollTop > element.bottom)) {
                     this._setOutOfView(element);
                 }
-            }            
+            }
+            
+            if (element.speed) {
+                this._transformElement(element);
+            }
         }
     }
 
     _transformElement(element) {
-        // const scrollTop = ScrollManager.getPosition().y;
-        // const scrollMiddle = scrollTop + window.innerHeight/2;
+        if (!element.inView) return;
 
-        // const transformDistance = (scrollMiddle - element.top) * - element.speed;
-        // TweenLite.set(element.el, { y: transformDistance });
+        const scrollTop = ScrollManager.getPosition().y;
+        const scrollMiddle = scrollTop + window.innerHeight/2;
+        const middle = element.top + (element.bottom - element.top);
+        let transformDistance = (scrollMiddle - middle) * - element.speed;
+
+        if (element.delay) {
+            let start = this._getTransform(element.el);
+            const lerpY = lerp(start.y, transformDistance, element.delay);
+
+            if (element.direction === 'horizontal') {
+                TweenLite.set(element.el, { x: lerpY });
+            } else {
+                TweenLite.set(element.el, { y: lerpY });
+            }
+        } else {
+            if (element.direction === 'horizontal') {
+                TweenLite.set(element.el, { x: transformDistance });
+            } else {
+                TweenLite.set(element.el, { y: transformDistance });
+            }
+        }
+
     }
 
     _setInView(trigger) {
@@ -151,6 +180,23 @@ class ScrollTriggerManager extends EventDispatcher {
         }
     }
 
+    _getTransform(el) {
+        const translate = {};
+        if(!window.getComputedStyle) return;
+    
+        const style = getComputedStyle(el);
+        const transform = style.transform || style.webkitTransform || style.mozTransform;
+    
+        let mat = transform.match(/^matrix3d\((.+)\)$/);
+        if(mat) return parseFloat(mat[1].split(', ')[13]);
+    
+        mat = transform.match(/^matrix\((.+)\)$/);
+        translate.x = mat ? parseFloat(mat[1].split(', ')[4]) : 0;
+        translate.y = mat ? parseFloat(mat[1].split(', ')[5]) : 0;
+    
+        return translate;
+    }
+
     _setupEventListeners() {
         ScrollManager.addEventListener('scroll', this._scrollHandler);
         ScrollManager.addEventListener('scroll:end', this._scrollEndHandler);
@@ -160,11 +206,10 @@ class ScrollTriggerManager extends EventDispatcher {
 
     _scrollHandler() {
         this._detectElements();
-        this._transformElements();
     }
 
     _scrollEndHandler() {
-
+        //nothing
     }
 
     _resizeEndHandler() {
