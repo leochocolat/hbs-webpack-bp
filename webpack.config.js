@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 const HandlebarsPlugin = require('handlebars-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -73,6 +74,9 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      barba: '@barba/core'
+    }),
     new HtmlWebpackPlugin({
       template: path.join(sourceDir, 'views', 'layout', 'template.hbs'),
       filename: path.join(templateDir, 'template.hbs'),

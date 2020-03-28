@@ -1,4 +1,9 @@
 /**
+ * Fonts
+ */
+ @import "../fonts/bonVivant/stylesheet.css";
+
+/**
  * Core
  */
  @import "core/fonts";
@@ -12,6 +17,17 @@
  @import "core/typography";
 
  /**
+ * Pages
+ */
+ @import "pages/page-scroll-demo";
+
+ /**
  * Sections
  */
- @import "sections/section-smooth-scroll-test";
+ @import "sections/section-scroll-image";
+ @import "sections/section-scroll-smooth";
+
+ /**
+ * Sections
+ */
+ @import "sections/headers/header-scroll";

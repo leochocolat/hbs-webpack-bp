@@ -4,7 +4,7 @@ import ScrollManager from '../managers/ScrollManager';
 import ScrollTriggerManager from '../managers/ScrollTriggerManager';
 import ResizeManager from '../managers/ResizeManager';
 
-import { TweenLite, Power2 } from 'gsap';
+import { TweenLite, Power2, Power3, TimelineLite } from 'gsap';
 
 class ScrollModule {
     constructor(options) {
@@ -137,10 +137,9 @@ class ScrollModule {
         //EXAMPLE
         console.log('call', e);
 
-        if (e.name === "hello") {
-            TweenLite.fromTo(e.el, 1, { autoAlpha: 0, y: 100, rotation: 10 }, { autoAlpha: 1, y: 0, rotation: 0 });
-        } else if (e.name === "bye") {
-            TweenLite.fromTo(e.el, 1.5, { autoAlpha: 0, x: 150, letterSpacing: '30px' }, { autoAlpha: 1, x: 0, letterSpacing: '0px', ease: Power2.easeInOut });
+        if (e.name === "stairs") {
+            let tl = new TimelineLite();
+            tl.staggerFromTo(e.el.querySelectorAll('span'), 1, { y: '100%' }, { y: '0%' }, 0.1);
         }
 
     }

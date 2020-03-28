@@ -9,6 +9,7 @@ import { TweenLite } from 'gsap';
 //TODO : 
 //ADD CUSTOM TARGET
 //ADD STICKY OPTION
+//FIX PARALLAX
 
 class ScrollTriggerManager extends EventDispatcher {
     constructor(options) {
@@ -55,14 +56,26 @@ class ScrollTriggerManager extends EventDispatcher {
         for (let i = 0; i < elements.length; i++) {
             const element = elements[i];
             const className = element.dataset.scrollClass;//not used for now
-            const top = element.getBoundingClientRect().top + ScrollManager.getPosition().y;
-            const bottom = top + element.offsetHeight;
+            let top = element.getBoundingClientRect().top + ScrollManager.getPosition().y;
             const offset = element.dataset.scrollOffset ? parseInt(element.dataset.scrollOffset) : 0;
+            let bottom = top + element.offsetHeight;
             const repeat = element.dataset.scrollRepeat;
             const call = element.dataset.scrollCall;
             const speed = element.dataset.scrollSpeed ? parseFloat(element.dataset.scrollSpeed) : undefined;
             const delay = element.dataset.scrollDelay ? parseFloat(element.dataset.scrollDelay) : undefined;
             const direction = element.dataset.scrollDirection || 'vertical';
+            const target = element.dataset.scrollTarget;
+
+            let targetEl;
+            if (target) {
+                targetEl = document.querySelector(`${target}`);
+                if (targetEl) {
+                    top = targetEl.getBoundingClientRect().top + ScrollManager.getPosition().y;
+                    bottom = top + element.offsetHeight;
+                }
+            } else {
+                targetEl = element;
+            }
 
             const trigger = {
                 el: element,
@@ -75,6 +88,7 @@ class ScrollTriggerManager extends EventDispatcher {
                 speed: speed,
                 delay: delay,
                 direction: direction,
+                target: targetEl,
                 inView: false
             }
 
@@ -172,8 +186,8 @@ class ScrollTriggerManager extends EventDispatcher {
     _updateElements() {
         for (let i = 0; i < this.triggers.length; i++) {
             const trigger = this.triggers[i];
-            const top = trigger.el.getBoundingClientRect().top + ScrollManager.getPosition().y + trigger.offset;
-            const bottom = top + trigger.el.offsetHeight - trigger.offset;
+            const top = trigger.target.getBoundingClientRect().top + ScrollManager.getPosition().y + trigger.offset;
+            const bottom = top + trigger.target.offsetHeight - trigger.offset;
 
             trigger.top = top;
             trigger.bottom = bottom;

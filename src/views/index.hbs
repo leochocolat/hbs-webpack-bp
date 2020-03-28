@@ -2,16 +2,11 @@
   {{#content "body"}}
 
   
-  <main role="main" class="js-scroll-container">
+  <main role="main" data-barba="container" data-barba-namespace="home" class="js-scroll-container">
     <div class="js-scroll-content">
-      {{> sections/section-home }}
-
+      {{> partials/header }}
+      {{> partials/footer }}
     </div>
-    {{!-- {{> partials/header }} --}}
-
-
-    {{!-- {{> partials/footer }} --}}
-    
   </main>
 
 
