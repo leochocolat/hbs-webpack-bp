@@ -1,5 +1,6 @@
 const COMPONENTS = {
     'sample': () => import('./components/SampleComponent'),
+    'ease-generator': () => import('./components/EaseGeneratorComponent'),
 }
 
 class ComponentFactory {
