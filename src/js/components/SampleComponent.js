@@ -14,6 +14,10 @@ class SampleComponent {
     tick() {
         
     }
+
+    close() {
+        
+    }
 }
 
 export default SampleComponent;

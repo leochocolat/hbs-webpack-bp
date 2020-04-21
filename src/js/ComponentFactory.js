@@ -5,7 +5,7 @@ const COMPONENTS = {
 class ComponentFactory {
     constructor() {
         this._selector = 'data-component';
-        this._components = {};
+        this._components = [];
     }
 
     start() {
@@ -15,7 +15,8 @@ class ComponentFactory {
             const componentName = element.getAttribute(this._selector);
             if (COMPONENTS[componentName]) {
                 COMPONENTS[componentName]().then((value) => {
-                    this._components[componentName] = new value.default({ el: element });
+                    const component = new value.default({ el: element });
+                    this._components.push(component);
                 });
             }
             else {
@@ -25,16 +26,16 @@ class ComponentFactory {
     }
 
     update() {
-        for (let i in this._components) {
+        for (let i = 0; i < this._components.length; i++) {
             if (!this._components[i].tick) continue;
-            this._components[i].tick();
+            this._components[i].tick(); 
         }
     }
 
     close() {
-        for(let i in this._components) {
-            if(!this._components[i].close) continue;
-            this._components[i].close();
+        for (let i = 0; i < this._components.length; i++) {
+            if (!this._components[i].close) continue;
+            this._components[i].close(); 
         }
     }
 }
