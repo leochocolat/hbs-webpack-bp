@@ -75,6 +75,55 @@ class ScrollManager extends EventDispatcher {
         return this._scrollheight;
     }
 
+    scrollTo(target, offset) {
+        const offsetValue = offset || 0;
+        let scrollDestination;
+
+        switch (typeof target) {
+            case 'string':
+                const el = document.querySelector(`${target}`);
+                if (el) {
+                    scrollDestination = el.getBoundingClientRect().top + this.getPosition().y + offsetValue;
+                }
+            break;
+
+            case 'number':
+                scrollDestination = target + this.getPosition().y + offsetValue;
+            break;
+
+            case 'object':
+                if (target.tagName) {
+                    scrollDestination = target.getBoundingClientRect().top + this.getPosition().y + offsetValue;
+                }
+            break;
+
+            default:
+                console.error('ScrollTo Target is not valid, it has to be either a selector, an absolute position or a node element');
+            break;
+        }
+
+        window.scrollTo({
+            top: scrollDestination,
+            behavior: 'smooth'
+        });
+    }
+
+    scrollToTop(offset) {
+        const offsetValue = offset || 0;
+        window.scrollTo({
+            top: offsetValue,
+            behavior: 'smooth'
+        });
+    }
+
+    scrollToBottom(offset) {
+        const offsetValue = offset || 0;
+        window.scrollTo({
+            top: this._scrollheight + offsetValue,
+            behavior: 'smooth'
+        });
+    }
+
     /**
     * Private
     */

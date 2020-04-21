@@ -7,9 +7,8 @@ import lerp from '../utils/lerp';
 import { TweenLite } from 'gsap';
 
 //TODO : 
-//ADD CUSTOM TARGET
 //ADD STICKY OPTION
-//FIX PARALLAX
+//CHECK IF PARALLAX IS FIXED
 
 class ScrollTriggerManager extends EventDispatcher {
     constructor(options) {
@@ -65,6 +64,7 @@ class ScrollTriggerManager extends EventDispatcher {
             const delay = element.dataset.scrollDelay ? parseFloat(element.dataset.scrollDelay) : undefined;
             const direction = element.dataset.scrollDirection || 'vertical';
             const target = element.dataset.scrollTarget;
+            const position = element.dataset.scrollPosition;
 
             let targetEl;
             if (target) {
@@ -89,6 +89,7 @@ class ScrollTriggerManager extends EventDispatcher {
                 delay: delay,
                 direction: direction,
                 target: targetEl,
+                position: position,
                 inView: false
             }
 
@@ -126,8 +127,29 @@ class ScrollTriggerManager extends EventDispatcher {
 
         const scrollTop = ScrollManager.getPosition().y;
         const scrollMiddle = scrollTop + window.innerHeight/2;
+        const scrollBottom = scrollTop + window.innerHeight;
         const middle = element.top + (element.bottom - element.top);
-        let transformDistance = (scrollMiddle - middle) * - element.speed;
+
+        let transformDistance;
+
+        switch (element.position) {
+            case 'top':
+                transformDistance = scrollTop * - element.speed;
+            break;
+
+            case 'elementTop':
+                transformDistance = (scrollBottom - element.top) * -element.speed;
+            break;
+
+            case 'bottom':
+                transformDistance = (this._contentHeight - scrollBottom + this.windowHeight) * element.speed;
+            break;
+
+            default:
+                transformDistance = (scrollMiddle - middle) * - element.speed;
+            break;
+        }
+
 
         if (element.delay) {
             let start = this._getTransform(element.el);
