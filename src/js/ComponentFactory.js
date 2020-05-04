@@ -1,5 +1,7 @@
 const COMPONENTS = {
     'sample': () => import('./components/SampleComponent'),
+    'home-component': () => import('./components/HomeComponent'),
+    'about-component': () => import('./components/AboutComponent'),
 }
 
 class ComponentFactory {
@@ -8,8 +10,11 @@ class ComponentFactory {
         this._components = [];
     }
 
-    start() {
-        this._elements = document.querySelectorAll(`[${this._selector}]`);
+    start(activeView) {
+        console.log('start component factory');
+
+        this._elements = activeView ? activeView.querySelectorAll(`[${this._selector}]`) : document.querySelectorAll(`[${this._selector}]`);
+
         for (let i = 0, limit = this._elements.length; i < limit; i++) {
             const element = this._elements[i];
             const componentName = element.getAttribute(this._selector);
@@ -33,10 +38,14 @@ class ComponentFactory {
     }
 
     close() {
+        console.log('close active components');
+
         for (let i = 0; i < this._components.length; i++) {
             if (!this._components[i].close) continue;
             this._components[i].close(); 
         }
+
+        this._components = [];
     }
 }
 

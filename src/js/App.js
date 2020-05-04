@@ -9,8 +9,12 @@ class App {
         this._setup();
     }
 
-    start() {
-        ComponentFactory.start();
+    start(activeView) {
+        ComponentFactory.start(activeView);
+    }
+
+    close() {
+        ComponentFactory.close();
     }
 
     _setup() {

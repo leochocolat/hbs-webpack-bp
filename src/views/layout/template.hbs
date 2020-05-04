@@ -15,7 +15,12 @@
   </head>
 
   <body class="{{bodyclass}}" data-barba="wrapper">
+
+    {{> partials/navbar }}
+
     {{#block "body"}}{{/block}}
+
+    {{> partials/footer }}
   </body>
 
   {{#block "scripts"}}{{/block}}

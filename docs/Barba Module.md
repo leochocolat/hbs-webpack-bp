@@ -7,7 +7,7 @@ donc le js n'est pas ré-exectué, à chaque fois que l'on quitte une page
 il est nécéssaire de : 
 - close les instances de components (et certains modules): créer une fonction close dans les class, 
 qui supprime les event listeners associés pour ne pas surcharger la mémoire utile du navigateur.  
-- destroy les components (et certains modules): appeler la fonction destroy sur l'instance.
+- destroy les components (et certains modules)
 
 Lorsque l'on arrive sur la nouvelle page il est néséssaire de relancer les components via la fonction
 start() du ComponentFactory.js (attention à ce que le querySelectorAll soit dans la fonction start) 

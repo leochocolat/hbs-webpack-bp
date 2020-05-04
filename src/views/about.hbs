@@ -1,12 +1,10 @@
 {{#extend "html/template"}}
   {{#content "body"}}
 
-  <main role="main">
-    
-    {{> partials/header }}
+  <main role="main" data-barba="container" data-barba-namespace="about">
 
-    {{> partials/footer }}
-    
+    {{> partials/about-component }}
+
   </main>
 
   {{/content}}
