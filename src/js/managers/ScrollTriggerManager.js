@@ -40,10 +40,10 @@ class ScrollTriggerManager extends EventDispatcher {
     }
 
     removeEventListeners() {
-        ScrollManager.removeEventListeners('scroll', this._scrollHandler);
-        ScrollManager.removeEventListeners('scroll:end', this._scrollEndHandler);
+        ScrollManager.removeEventListener('scroll', this._scrollHandler);
+        ScrollManager.removeEventListener('scroll:end', this._scrollEndHandler);
 
-        ResizeManager.removeEventListeners('resize:end', this._resizeEndHandler);
+        ResizeManager.removeEventListener('resize:end', this._resizeEndHandler);
     }
 
     /**

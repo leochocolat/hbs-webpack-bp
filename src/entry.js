@@ -1,16 +1,14 @@
+//css
+import './css/app.scss';
+
 //vendors
 import barba from '@barba/core';
 import { gsap } from 'gsap';
 
 import App from './js/App';
-import HomeView from './js/views/HomeView';
 import { transitionIn, transitionOut } from './js/transitions/transition';
 
-import './css/app.scss';
-
 const app = new App();
-
-app.start();
 
 //functions ordered following the lifecycle
 barba.init({
@@ -27,7 +25,6 @@ barba.init({
 
             transitionOut(data).then(() => {
                 done();
-                app.start(data.next.container);
             });
         },
         afterLeave(data) {
@@ -47,8 +44,10 @@ barba.init({
         afterEnter(data) {
             
         },
-        after() {
-            
+        after(data) {
+            console.log('after')
+            app.start(data.next.container);
+            console.log('after after')
         }
     }]
 });

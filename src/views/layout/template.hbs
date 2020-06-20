@@ -14,11 +14,12 @@
 
   </head>
 
-  <body class="{{bodyclass}}" data-barba="wrapper">
-
+  <body class="{{bodyclass}} js-scroll-container">
     {{> partials/navbar }}
 
-    {{#block "body"}}{{/block}}
+    <div class="js-scroll-content" data-barba="wrapper">
+      {{#block "body"}}{{/block}}
+    </div>
 
     {{> partials/footer }}
   </body>

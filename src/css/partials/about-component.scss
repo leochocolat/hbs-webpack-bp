@@ -1,5 +1,5 @@
 .about-component {
-    height: 200px;
+    height: 100vh;
     width: 100%;
 
     background-color: red;
@@ -10,5 +10,16 @@
     justify-content: center;
     align-items: center;
 
-    margin: 100px 0;
+    &:nth-child(odd) {
+        color: grey;
+        background-color: white;
+    }
+}
+
+.about-component__heading {
+    &.isInView {
+        color: yellow;
+        
+        transition: color 1s, ease-in-out;
+    }
 }

@@ -46,6 +46,16 @@ class ScrollModule {
         this._removeStyleProps();
     }
 
+    updateScroll() {
+        ScrollTriggerManager.removeEventListeners();
+        
+        this._contentHeight = this.content.clientHeight;
+        this.container.style.height =  `${this._contentHeight}px`;
+        this._setOffset();
+
+        ScrollTriggerManager.start({ el: this.container });
+    }
+
     /**
     * Private
     */

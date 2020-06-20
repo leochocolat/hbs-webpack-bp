@@ -1,9 +1,9 @@
-import { TimelineLite } from 'gsap';
+import { TimelineLite, Power3 } from 'gsap';
 
 function transitionOut(data) {
     const promise = new Promise(resolve => {
         let timeline = new TimelineLite({ onComplete: resolve });
-        timeline.to(data.current.container, 1, { autoAlpha: 0 });
+        timeline.to(data.current.container, 0.5, { autoAlpha: 0, ease: Power3.easeInOut });
         timeline.set(data.current.container, { display: 'none' });
     });
 
@@ -13,7 +13,7 @@ function transitionOut(data) {
 function transitionIn(data) {
     const promise = new Promise(resolve => {
         let timeline = new TimelineLite({ onComplete: resolve });
-        timeline.fromTo(data.next.container, 1, { autoAlpha: 0 }, { autoAlpha: 1 });
+        timeline.from(data.next.container, 0.5, { autoAlpha: 0, ease: Power3.easeInOut });
     });
 
     return promise;
