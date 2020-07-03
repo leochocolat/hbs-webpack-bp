@@ -1,23 +1,20 @@
 import ComponentFactory from './ComponentFactory';
-import ScrollModule from './modules/ScrollModule';
+import bindAll from './utils/bindAll';
+import { gsap } from 'gsap';
 
 class App {
     constructor() {
+        bindAll(
+            this,
+            '_tickHandler'
+        );
+
         this._setup();
     }
 
     _setup() {
-        this._setupSmoothScroll();
+        this._setupEventListeners();
         this._update();
-    }
-
-    _setupSmoothScroll() {
-        this._smoothScrollModule = new ScrollModule({
-            container: document.querySelector('.js-scroll-container'),
-            content: document.querySelector('.js-scroll-content'),
-            smooth: true,
-            smoothValue: 0.15
-        });
     }
 
     start() {
@@ -26,9 +23,14 @@ class App {
 
     _update() {
         ComponentFactory.update();
-        this._smoothScrollModule.update();
+    }
 
-        requestAnimationFrame(this._update.bind(this));
+    _setupEventListeners() {
+        gsap.ticker.add(this._tickHandler);
+    }
+
+    _tickHandler() {
+        this._update();
     }
 }
 
